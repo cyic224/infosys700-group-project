@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.site-card-border-less-wrapper {
+  padding-top: 510px;
+  padding-bottom: 510px;
+  padding-left: 41%;
+  background: #ececec;
+}
+  [data-theme="dark"] .site-card-border-less-wrapper {
+    background: #303030;
+  }
+  .login-form {
+    width: 100%;
+  }
+  .login-form-forgot {
+    float: right;
+  }
+  .ant-col-rtl .login-form-forgot {
+    float: left;
+  }
+  .login-form-button {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
