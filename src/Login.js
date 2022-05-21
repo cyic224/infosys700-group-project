@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Card, Form, Input, Button, Checkbox, Modal } from "antd";
+import { Layout, Card, Form, Input, Button, Checkbox, Modal,Popconfirm, message } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Alert, Collapse, IconButton } from "@mui/material";
@@ -18,6 +18,24 @@ function Login() {
   const [alert, setAlert] = React.useState(false);
   const [modalAlert, setModalAlert] = React.useState(false);
   const [veriCode, setVeriCode] = React.useState("");
+  const [isWifi,setIsWifi] = React.useState(true)
+  const [wifiALert,setWifiAlert] = React.useState(false)
+
+  const handleWifiStatus=()=>{
+    if (isWifi===true){
+      setIsModalVisible(true);
+    }
+  }
+  function confirm(e) {
+  console.log(e);
+  message.success('Action continued with Wifi, take care with your important information.');
+  setIsModalVisible(true)
+}
+
+function cancel(e) {
+  console.log(e);
+  message.error('Login cancelled.');
+}
 
   const handleSubmit = () => {
     if (
@@ -26,7 +44,6 @@ function Login() {
       password != null &&
       password === "admin"
     ) {
-      setIsModalVisible(true);
       setAlert(false);
     } else {
       setAlert(true);
@@ -107,14 +124,22 @@ function Login() {
                   placeholder="Password"
                 />
               </Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                onClick={handleSubmit}
-                className="login-form-button"
-              >
-                Submit
-              </Button>
+                <Popconfirm
+                  title="Public Wifi detected, your information are having a risk of leak. Press OK to proceed or cancel login."
+                  onConfirm={confirm}
+                  onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={handleSubmit}
+                    className="login-form-button"
+                  >
+                    Submit
+                  </Button>
+                </Popconfirm>
             </Form>
             <Modal
               title="Two Factor Authentication"
