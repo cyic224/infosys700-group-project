@@ -1,105 +1,83 @@
 import React from "react";
-import { Layout, Card, Form, Input, Button, Checkbox, Modal,Popconfirm, message } from "antd";
+import { Layout, Card, Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Alert, Collapse, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  LockOutlined,
+  SafetyCertificateOutlined,
+} from "@ant-design/icons";
 
 const { Content } = Layout;
 
 function Login() {
   let navigate = useNavigate();
+  let loginAttempts = 0;
 
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [account, setAccount] = React.useState(null);
   const [password, setPassword] = React.useState(null);
   const [alert, setAlert] = React.useState(false);
   const [modalAlert, setModalAlert] = React.useState(false);
   const [veriCode, setVeriCode] = React.useState("");
-  const [isWifi,setIsWifi] = React.useState(true)
-  const [wifiALert,setWifiAlert] = React.useState(false)
+  const [detectionAlert, setDetectionAlert] = React.useState(false);
+  const [veriInput, setVeriInput] = React.useState(false);
+  const [disableLogin, setDisableLogin] = React.useState(false);
+  const [loginLockAlert, setLoginLockAlert] = React.useState(false);
 
-  const handleWifiStatus=()=>{
-    if (isWifi===true){
-      setIsModalVisible(true);
-    }
-  }
-  function confirm(e) {
-  console.log(e);
-  message.success('Action continued with Wifi, take care with your important information.');
-  setIsModalVisible(true)
-}
-
-function cancel(e) {
-  console.log(e);
-  message.error('Login cancelled.');
-}
+  const handleVeriCode = () => {
+    setDetectionAlert(false);
+    setVeriInput(true);
+  };
 
   const handleSubmit = () => {
     if (
       account !== null &&
       account === "admin" &&
       password != null &&
-      password === "admin"
+      password === "admin" &&
+      veriInput === false
     ) {
-      setAlert(false);
-    } else {
-      setAlert(true);
-    }
-  };
-
-  const handleOk = () => {
-    if (veriCode === "NJ7V5X") {
-      setIsModalVisible(false);
+      setDetectionAlert(true);
+    } else if (veriCode === "NJ7V5X" && veriInput === true) {
       navigate("/Main");
       setAccount("");
       setPassword("");
       setVeriCode("");
-    } else {
+    } else if (veriCode !== "NJ7V5X" && veriInput === true) {
       setModalAlert(true);
+    } else if (loginAttempts >= 4) {
+      setDisableLogin(true);
+      setLoginLockAlert(true);
+    } else {
+      setAlert(true);
+      const count = loginAttempts++;
+      console.log(loginAttempts);
     }
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
   return (
     <Layout>
       <Content>
         <div className="site-card-border-less-wrapper">
           <Card
-            title="XXX Banking Interface Login"
+            title=" Online Banking Login Protptype"
             bordered={false}
-            style={{ width: "30%", height: "100%", textAlign: "center" }}
+            style={{
+              width: "24%",
+              height: "50vh",
+              textAlign: "center",
+            }}
           >
-            <Collapse in={alert}>
-              <Alert
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => {
-                      setAlert(false);
-                    }}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-                severity="error"
-              >
-                Incorrect account or password!
-              </Alert>
-            </Collapse>
             <Form
               name="basic"
               initialValues={{
                 remember: true,
               }}
               autoComplete="off"
+              style={{ marginTop: "70px" }}
             >
               <Form.Item
                 name="account"
@@ -124,30 +102,31 @@ function cancel(e) {
                   placeholder="Password"
                 />
               </Form.Item>
-                <Popconfirm
-                  title="Public Wifi detected, your information are having a risk of leak. Press OK to proceed or cancel login."
-                  onConfirm={confirm}
-                  onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
+              <Collapse in={veriInput}>
+                <Form.Item
+                  name="verificationCode"
+                  required
+                  value={veriCode}
+                  onChange={(e) => setVeriCode(e.target.value)}
                 >
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    onClick={handleSubmit}
-                    className="login-form-button"
-                  >
-                    Submit
-                  </Button>
-                </Popconfirm>
-            </Form>
-            <Modal
-              title="Two Factor Authentication"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-            >
-              <Collapse in={modalAlert}>
+                  <Input
+                    placeholder="6 digits code"
+                    prefix={
+                      <SafetyCertificateOutlined className="site-form-item-icon" />
+                    }
+                  />
+                </Form.Item>
+              </Collapse>
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={handleSubmit}
+                className="login-form-button"
+                disabled={disableLogin}
+              >
+                Login
+              </Button>
+              <Collapse in={loginLockAlert}>
                 <Alert
                   action={
                     <IconButton
@@ -155,7 +134,7 @@ function cancel(e) {
                       color="inherit"
                       size="small"
                       onClick={() => {
-                        setModalAlert(false);
+                        setLoginLockAlert(false);
                       }}
                     >
                       <CloseIcon fontSize="inherit" />
@@ -164,15 +143,67 @@ function cancel(e) {
                   sx={{ mb: 2 }}
                   severity="error"
                 >
-                  Incorrect code, please try again!
+                  MAX FAIL TIME ATTEMPTED, LOGIN LOCKED.
                 </Alert>
               </Collapse>
-              <Input
-                placeholder="Enter your dynamic authentication code"
-                value={veriCode}
-                onChange={(e) => setVeriCode(e.target.value)}
-              />
-            </Modal>
+              <Collapse in={alert}>
+                <Alert
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setAlert(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  sx={{ mb: 2 }}
+                  severity="error"
+                >
+                  Incorrect account or password!
+                </Alert>
+              </Collapse>
+              <Collapse in={detectionAlert}>
+                <Alert
+                  action={
+                    <Button
+                      size="small"
+                      style={{ marginTop: "30px" }}
+                      onClick={handleVeriCode}
+                    >
+                      OK
+                    </Button>
+                  }
+                  severity="info"
+                >
+                  Public Wifi detected. To prevent data leakage. Press OK to
+                  proceed login.
+                </Alert>
+              </Collapse>
+            </Form>
+            <Collapse in={modalAlert}>
+              <Alert
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setModalAlert(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
+                severity="error"
+              >
+                Incorrect code, please try again!
+              </Alert>
+            </Collapse>
           </Card>
         </div>
       </Content>

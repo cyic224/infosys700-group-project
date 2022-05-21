@@ -14,37 +14,50 @@ function Main() {
           <Card
             title="Welcome, admin"
             bordered={false}
-            style={{ width: "30%", height: "100%", textAlign: "center" }}
+            style={{
+              width: "24%",
+              height: "50vh",
+              textAlign: "center",
+            }}
           >
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-              onClick={() => navigate("/Transaction")}
-            >
-              New Transaction
-            </Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
-              Oversea Payment
-            </Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
-              Recent Statement
-            </Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
-              Setting
-            </Button>
+            <div style={{ marginTop: "40px" }}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+                onClick={() => navigate("/Transaction")}
+              >
+                New Transaction
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Recent Transaction
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Oversea Payment
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Recent Statement
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Setting
+              </Button>
+            </div>
           </Card>
         </div>
       </Content>

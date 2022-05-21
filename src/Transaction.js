@@ -40,28 +40,12 @@ const Transaction = () => {
           <Card
             title="Dynamic Athentication Code"
             bordered={false}
-            style={{ width: "30%", height: "100%", textAlign: "center" }}
+            style={{
+              width: "24%",
+              height: "50vh",
+              textAlign: "center",
+            }}
           >
-            <Collapse in={veriCodeAlert}>
-              <Alert
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => {
-                      setVeriCodeAlert(false);
-                    }}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-                severity="error"
-              >
-                Incorrect code, please try again!
-              </Alert>
-            </Collapse>
             <Form layout="horizontal">
               <Form.Item>
                 <Input
@@ -106,6 +90,26 @@ const Transaction = () => {
                 Make Transaction
               </Button>
             </Form>
+            <Collapse in={veriCodeAlert}>
+              <Alert
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setVeriCodeAlert(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                style={{ marginTop: "10px" }}
+                severity="error"
+              >
+                Incorrect code, please try again!
+              </Alert>
+            </Collapse>
           </Card>
         </div>
       </Content>

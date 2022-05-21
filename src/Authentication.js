@@ -34,7 +34,11 @@ function Authentication() {
           <Card
             title="Dynamic Athentication Code"
             bordered={false}
-            style={{ width: "30%", height: "100%", textAlign: "center" }}
+            style={{
+              width: "24%",
+              height: "50vh",
+              textAlign: "center",
+            }}
           >
             <Box sx={{ width: "100%" }}>
               <Card>

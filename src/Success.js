@@ -14,7 +14,11 @@ function Success() {
         <div className="site-card-border-less-wrapper">
           <Card
             bordered={false}
-            style={{ width: "30%", height: "100%", textAlign: "center" }}
+            style={{
+              width: "24%",
+              height: "50vh",
+              textAlign: "center",
+            }}
           >
             <Result
               status="success"
