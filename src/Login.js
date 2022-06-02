@@ -54,7 +54,6 @@ function Login() {
     } else {
       setAlert(true);
       const count = loginAttempts++;
-      console.log(loginAttempts);
     }
   };
 
